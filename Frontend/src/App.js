@@ -14,8 +14,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />}></Route>
         <Route path='/profile' element={<Profile />}></Route>
-        <Route path='/chat' element={<ChatPage />}></Route>
-        {/* <Route path='/chat/:id' element={<ChatPage />}></Route> */}
+        {/* <Route path='/chat' element={<ChatPage />}></Route> */}
+         <Route path='/chat/:id' element={<ChatPage />}></Route> 
         <Route path='/signup' element={<Register />}></Route>
         <Route path='/login' element={<Login />}></Route>
       </Routes>
