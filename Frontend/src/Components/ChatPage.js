@@ -125,6 +125,7 @@ function ChatPage() {
             <footer class="bg-blue-100 shadow dark:bg-gray-900">
                 <div class="w-full max-w-screen-xl mx-auto p-2 md:py-4">
                     <form onSubmit={handleSubmit} className=" flex justify-between gap-4 items-center px-2 ">
+                   
                         <div class="relative w-full">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                 <svg class="w-6 h-6 text-blue-500 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
@@ -150,11 +151,11 @@ function ChatPage() {
 
                             </div>
                         </div>
-                        <a type="submit" className=" rounded-full p-2 bg-blue-400 pe-2">
+                        <button type="submit" className=" rounded-full p-2 bg-blue-400 pe-2">
                             <svg class="w-6 h-6 text-white dark:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                             </svg>
-                        </a>
+                        </button>
                     </form>
                 </div>
             </footer>

@@ -24,7 +24,7 @@ function List() {
     }, [])
     return (
         <div >
-            <div class="flex flex-col xl:w-72 h-full sm:w-96  mx-2 overflow-y-auto">
+            <div class="flex flex-col xl:w-72 h-full sm:w-96  mx-2 ">
                 <div class="flex justify-between border-b-2 items-center py-4 px-2 ">
                     <div class="relative">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -63,7 +63,7 @@ function List() {
                     </div>
 
                 </div>
-                {/* {
+               {
                     user?.map((element, index) => {
                         return (
                             <div className="flex flex-row py-2  px-2 items-center">
@@ -87,9 +87,9 @@ function List() {
 
                         );
                     })
-                } */}
+                } 
                 <div
-                    class="flex flex-row py-2  px-2 items-center "
+                    class="flex flex-row py-2  px-2 items-center xl:overflow-auto"
                 >
 
                     <div class="w-1/4">

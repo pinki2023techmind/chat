@@ -6,8 +6,8 @@ import {isMobile} from 'react-device-detect';
 function Home() {
   return (
 
-      <div class="  xl:overflow-hidden shadow-lg ">
-        <div class="xl:flex flex-row justify-between xl:overflow-hidden bg-gray-100">
+      <div class=" shadow-lg ">
+        <div class="xl:flex flex-row justify-between  bg-gray-100">
             <List/>
             <ChatPage/>
             <Profile/>
