@@ -184,7 +184,7 @@
          
           
           $insertQuery = "INSERT INTO `chatrooms`(incoming_userId, outgoing_userId, msg)
-           VALUES('$id', '$incomingUserId','$msg')";
+           VALUES('$incomingUserId', '$id', '$msg')";
          
       
           $result = mysqli_query($conn, $insertQuery);
