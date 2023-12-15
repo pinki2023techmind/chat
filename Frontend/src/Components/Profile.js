@@ -1,5 +1,18 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 
 function Profile() {
+    const {id} = useParams()
+    const [user, setUser] = useState([])
+    useEffect(() => {
+      axios.get(`http://localhost/chat/AdminPanel/individualUser.php?id=`+id)
+          .then(res => {
+              setUser(res.data.data[0])
+              console.log(res.data.data[0])
+          })
+          .catch(err => console.log(err))
+  }, [])
     return (
         <div>
             <div class="xl:w-72 bg-gray-100 px-5">
@@ -19,12 +32,15 @@ function Profile() {
 
                     <img
                         src="https://source.unsplash.com/L2cxSuKWbpo/600x600"
-                        class="object-cover rounded-full mt-2 h-32 w-32"
+                        class="object-cover rounded-full mt-2 h-28 w-28"
                         alt=""
                     />
-                    <div class="font-semibold text-xl">Steve Smith</div>
+                    {
+                        id== undefined ? <div class="font-semibold text-xl">Raju</div>
+                        : <div class="font-semibold text-xl">{user.user_name}</div>
+                    }
+                    
                     <div className="font-semibold"><p >Junior Developer</p></div>
-
                     <div class="flex justify-center items-center gap-8 font-light py-4">
                         <a >
                             <svg class='' xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="rgb(96, 165, 250)" viewBox="0 0 512 512">
