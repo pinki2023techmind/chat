@@ -25,7 +25,7 @@ function Login() {
             localStorage.setItem('id',(output.data.data.id))
            
             
-            navigate('/')
+            navigate('/home')
         })
             .catch(err => {console.log(err)
             alert("Password and email address not matched")}
