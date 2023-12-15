@@ -1,6 +1,6 @@
 <?php 
 
-    // header('Access-Control-Allow-Origin:*');
+
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Headers: *");
     header('Content-Type:application/json');
@@ -11,17 +11,17 @@
         require_once('function.php');
 
             $inputData = json_decode(file_get_contents("php://input"), true);
-          
+            // echo $inputData['first_name'];
 
             if(empty($inputData))
             {
-                $storeMsg = storeMsg($_POST);
+                $getChat = getChat($_GET);
             }
             else
             {
-                $storeMsg = storeMsg($inputData);
+                $getChat = getChat($_GET);
                 
             }
-           echo $storeMsg;
-
+            echo $getChat;
+ 
 ?>

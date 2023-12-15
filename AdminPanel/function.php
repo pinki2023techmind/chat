@@ -24,7 +24,8 @@
    
     //Login 
 
-    function login($inputData){
+    function login($inputData)
+    {
 
         
         global $conn;
@@ -58,7 +59,7 @@
                     $arr['id'] = $res['userId'];
                     $arr['jwt'] = $jwt;
 
-                          $data = [
+                    $data = [
                     'status' =>200,
                     'message' =>'User list fetch successfully',
                     'data' =>$arr
@@ -214,7 +215,7 @@
 
   //update
 
-  function updateData($userInput, $params)
+  function getChat( $params)
   {
       global $conn;
       // if(isset($_FILES['pimg']["name"])){
@@ -225,36 +226,45 @@
               return error422("Enter the id");
           }
               $id = mysqli_real_escape_string($conn, $params['id']);
-              $pTitle = mysqli_real_escape_string($conn, $userInput['pending_title']);
-              $pDate = mysqli_real_escape_string($conn, $userInput['pending_date']);
-              $pDec = mysqli_real_escape_string($conn, $userInput['pending_dec']);
+          
              
               if(empty(trim($id))){
                   return error422('Enter your  id');
               }
-              if(empty(trim($pTitle))){
-                  return error422('Enter your  title');
-              }
-              if(empty(trim($pDate))){
-                  return error422('Enter your  Description');
-              }
+              
 
       else
       {         
-        $insertQuery = "UPDATE pending_approvals SET pending_date ='$pDate',
-           pending_title ='$pTitle', pending_dec ='$pDec' WHERE id ='$id' ";
+        $insertQuery = "SELECT * FROM chatrooms where outgoing_userId  = '$id' ORDER BY chatrooms.createdOn DESC";
           
           $result = mysqli_query($conn, $insertQuery);
          
           if($result)
           {
-              $data = [
-
-                  'status' =>201,
-                  'message' =>' inserted successfully',
-              ];
-              header("HTTP/1.0 201 Created");
-              return json_encode($data);
+              
+              if(mysqli_num_rows($result) > 0)
+              {
+    
+                  $res = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    
+                  $data = [
+                      'status' =>200,
+                      'message' =>'User list fetch successfully',
+                      'data' =>$res
+                  ];
+                  header("HTTP/1.0 200 Ok");
+                  return json_encode($data);
+          
+    
+              }else
+              {
+                  $data = [
+                      'status' =>404,
+                      'message' =>'No User Find',
+                  ];
+                  header("HTTP/1.0 404 No User Find");
+                  return json_encode($data);
+              }
           }
           else
           {
@@ -270,108 +280,6 @@
   }
   
 
-  //fetch with id 
-
-  function getPending($params)
-    {
-        global $conn;
-
-            if(!isset($params['id'])){
-                return error422("product id not found");
-            }
-            elseif($params['id'] == null ){
-                return error422("Enter the product id");
-            }
-                $id = mysqli_real_escape_string($conn, $params['id']);
-              
-                $insertQuery = "SELECT * FROM pending_approvals where id = '$id'";
-              
-                $query_run = mysqli_query($conn, $insertQuery);
-          
-        if($query_run)
-        {
-            
-            if(mysqli_num_rows($query_run) > 0)
-            {
-
-                $res = mysqli_fetch_all($query_run, MYSQLI_ASSOC);
-
-                $data = [
-                    'status' =>200,
-                    'message' =>'User list fetch successfully',
-                    'data' =>$res
-                ];
-                header("HTTP/1.0 200 Ok");
-                return json_encode($data);
-        
-
-            }else
-            {
-                $data = [
-                    'status' =>404,
-                    'message' =>'No User Find',
-                ];
-                header("HTTP/1.0 404 No User Find");
-                return json_encode($data);
-            }
-        }
-
-        else
-        {
-            $data = [
-                'status' =>500,
-                'message' =>'Internal server error',
-            ];
-            header("HTTP/1.0 500 Internal server error");
-            return json_encode($data);
-
-        }
-        
-      
-    }
-
-
-
-
-   
-
-
-     //delete
-
-     function getdeletePending($id){
-
-        global $conn;
-        
-        if(!isset($id['id'])){
-            return error422('product id not found in url');
-        }
-        elseif($id['id'] == null){
-            return error422('Enter the product id');
-        }
-
-        $pID = mysqli_real_escape_string($conn, $id['id']);
-
-        $query = "DELETE FROM pending_approvals Where id = '$pID' LIMIT 1";
-        $result = mysqli_query($conn, $query);
-
-        if($result){
-            $data = [
-                'status' =>200,
-                'message' =>'Product deleted Successfully',
-            ];
-            header("HTTP/1.0 200 Deleted");
-            return json_encode($data);
-        }
-        else{
-            $data = [
-                'status' =>404,
-                'message' =>'Product Not Found',
-            ];
-            header("HTTP/1.0 404 Product Not Found");
-            return json_encode($data);
-        }
-
-    }
 
     //fetch user data
 
@@ -379,16 +287,16 @@
     {
 
         global $conn;
-        
-        try {
+       
+            try {
             $key = 'example_key';
             $headers=getallheaders();
             $authcode=trim($headers['Authorization']);
             $token=substr($authcode,7);
-            $decoded = JWT::decode($token, new Key($key,'HS256'));
-         
+            $decoded = JWT::decode($token, new Key($key,'HS256'));   
+          
             $query = "SELECT * FROM chat_user_table";
-        
+              
             $query_run = mysqli_query($conn, $query);
             
         if($query_run)
@@ -397,8 +305,8 @@
             if(mysqli_num_rows($query_run) > 0)
             {
                 
-                $res = mysqli_fetch_all($query_run, MYSQLI_ASSOC);
-
+                $res = mysqli_fetch_all($query_run, MYSQLI_ASSOC);                
+                // echo $_SESSION['userId']; 
                 $data = [
                     'status' =>200,
                     'message' =>'User list fetch successfully',
@@ -406,7 +314,7 @@
                 ];
                 header("HTTP/1.0 200 Ok");
                 return json_encode($data);
-        
+                
 
             }else
             {
@@ -441,65 +349,171 @@
     }
 
    
-
-      //fetch  user data with id 
-
-  function getInvoiceUser($params)
-  {
-      global $conn;
-
-          if(!isset($params['id'])){
-              return error422("product id not found");
-          }
-          elseif($params['id'] == null ){
-              return error422("Enter the product id");
-          }
-              $id = mysqli_real_escape_string($conn, $params['id']);
+    //fetch user by id
+    function getIndividualUser( $params)
+    {
+        global $conn;
+        // if(isset($_FILES['pimg']["name"])){
+            if(!isset($params['id'])){
+                return error422("product id not found");
+            }
+            elseif($params['id'] == null ){
+                return error422("Enter the id");
+            }
+                $id = mysqli_real_escape_string($conn, $params['id']);
             
-              $insertQuery = "SELECT * FROM userinfo where id = '$id'";
+               
+                if(empty(trim($id))){
+                    return error422('Enter your  id');
+                }
+                
+  
+        else
+        {         
+          $insertQuery = "SELECT * FROM `chat_user_table` where userId = '$id'";
             
-              $query_run = mysqli_query($conn, $insertQuery);
-        
-      if($query_run)
-      {
-          
-          if(mysqli_num_rows($query_run) > 0)
-          {
-
-              $res = mysqli_fetch_all($query_run, MYSQLI_ASSOC);
-
-              $data = [
-                  'status' =>200,
-                  'message' =>'User list fetch successfully',
-                  'data' =>$res
-              ];
-              header("HTTP/1.0 200 Ok");
-              return json_encode($data);
+            $result = mysqli_query($conn, $insertQuery);
+           
+            if($result)
+            {
+                
+                if(mysqli_num_rows($result) > 0)
+                {
       
-
-          }else
-          {
-              $data = [
-                  'status' =>404,
-                  'message' =>'No User Find',
-              ];
-              header("HTTP/1.0 404 No User Find");
-              return json_encode($data);
-          }
-      }
-
-      else
-      {
-          $data = [
-              'status' =>500,
-              'message' =>'Internal server error',
-          ];
-          header("HTTP/1.0 500 Internal server error");
-          return json_encode($data);
-
-      }
+                    $res = mysqli_fetch_all($result, MYSQLI_ASSOC);
       
+                    $data = [
+                        'status' =>200,
+                        'message' =>'User list fetch successfully',
+                        'data' =>$res
+                    ];
+                    header("HTTP/1.0 200 Ok");
+                    return json_encode($data);
+            
+      
+                }else
+                {
+                    $data = [
+                        'status' =>404,
+                        'message' =>'No User Find',
+                    ];
+                    header("HTTP/1.0 404 No User Find");
+                    return json_encode($data);
+                }
+            }
+            else
+            {
+                $data = [
+                    'status' =>500,
+                    'message' =>'internal server error',
+                ];
+                header("HTTP/1.0 500 internal server error");
+                return json_encode($data);
+            }
+  
+        }
+    }
+
+
+    //update 
     
-  }
+    //update product data
 
+    function updateData($userInput, $productParams)
+    {
+        global $conn;
+        // if(isset($_FILES['pimg']["name"])){
+            if(!isset($productParams['id'])){
+                return error422("product id not found");
+            }
+            elseif($productParams['id'] == null ){
+                return error422("Enter the product id");
+            }
+                $id = mysqli_real_escape_string($conn, $productParams['id']);
+                $name = mysqli_real_escape_string($conn, $userInput['user_name']);
+                if(isset($_FILES['user_profile']["name"])){
+                $target_dir = "upload/";
+                $target_file = $target_dir . basename($_FILES['user_profile']["name"]);
+                $uploadOk = 1;
+                $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+                }
+                if(empty(trim($id))){
+                    return error422('Enter your Product Title');
+                }
+               
+        else
+        {
+           
+            // Check if image file is a actual image or fake image
+            if(isset($_FILES['user_profile']["name"])){
+              $check = getimagesize($_FILES['user_profile']["tmp_name"]);
+              if($check !== false) {
+                echo "File is an image - " . $check["mime"] . ".";
+                $uploadOk = 1;
+              } else {
+                echo "File is not an image.";
+                $uploadOk = 0;
+              }
+
+              if ($uploadOk == 0) {
+                echo "Sorry, your file was not uploaded.";
+              // if everything is ok, try to upload file
+              } else {
+                if (move_uploaded_file($_FILES['user_profile']["tmp_name"], $target_file)) {
+                  echo "The file ". htmlspecialchars( basename( $_FILES['user_profile']["name"])). " has been uploaded.";
+                } else {
+                  echo "Sorry, there was an error uploading your file.";
+                }
+              }
+            
+            $insertQuery = "UPDATE chat_user_table SET user_name ='$name', user_profile ='$target_file'
+            WHERE userId ='$id' ";
+            
+            }
+            else{
+                $insertQuery = "UPDATE chat_user_table SET user_name ='$name'
+              WHERE userId ='$id' ";
+            }
+            $query_run = mysqli_query($conn, $insertQuery);
+              
+            echo $query_run;
+               
+        if($query_run)
+        {
+            
+            if(mysqli_num_rows($query_run) > 0)
+            {
+                $res = mysqli_fetch_all($query_run, MYSQLI_ASSOC);
+
+                $data = [
+                    'status' =>200,
+                    'message' =>'User list fetch successfully',
+                    'data' =>$res
+                ];
+                header("HTTP/1.0 200 Ok");
+                return json_encode($data);
+            }else
+            {
+                $data = [
+                    'status' =>404,
+                    'message' =>'No User Find',
+                ];
+                header("HTTP/1.0 404 No User Find");
+                return json_encode($data);
+            }
+        }
+
+        else
+        {
+            $data = [
+                'status' =>500,
+                'message' =>'Internal server error',
+            ];
+            header("HTTP/1.0 500 Internal server error");
+            return json_encode($data);
+
+        }
+
+        }
+    }
 ?>
